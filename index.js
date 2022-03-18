@@ -7,11 +7,15 @@ const keys = require("./config/keys");
 require("./models/User");
 require("./services/passport");
 
-mongoose.connect(keys.mongoURI, {
-  useNewUrlParser: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true,
-});
+mongoose
+  .connect(keys.mongoURI)
+  .then(() => {
+    console.log("Mongo Connection Open...");
+  })
+  .catch((err) => {
+    console.log("MONGO CONNECTION ERROR!");
+    console.log(err);
+  });
 
 const app = express();
 
