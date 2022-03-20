@@ -8,6 +8,9 @@ const Survey = mongoose.model("surveys");
 const Mailer = require("../services/Mailer");
 
 module.exports = (app) => {
+  app.get("/api/surveys/thanks", (req, res) => {
+    res.send("Thank you for your feedback!");
+  });
   app
     .route("/api/surveys")
     .get(requireLogin, (req, res) => {
