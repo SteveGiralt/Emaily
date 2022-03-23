@@ -2,12 +2,30 @@ import React, { Component } from "react";
 import { reduxForm, Field } from "redux-form";
 import { Link } from "react-router-dom";
 import SurveyField from "./SurveyField";
+import validateEmails from "../../utils/validateEmails";
 
 const FIELDS = [
-  { label: "Survey Title", name: "title" },
-  { label: "Subject Line", name: "subject" },
-  { label: "Email Body", name: "body" },
-  { label: "Recipient List", name: "emails" },
+  {
+    label: "Survey Title",
+    name: "title",
+    errorMessage: "Please title your survey!",
+  },
+  {
+    label: "Subject Line",
+    name: "subject",
+    errorMessage: "Your survey email needs a subject line!",
+  },
+  {
+    label: "Email Body",
+    name: "body",
+    errorMessage: "You can't send a blank survey!",
+  },
+  {
+    label: "Recipient List",
+    name: "emails",
+    placeholder: "user@email.com, user2@email.com, user3@email.com",
+    errorMessage: "Recipient list must be a comma separated list!",
+  },
 ];
 
 class SurveyForm extends Component {
@@ -48,9 +66,13 @@ class SurveyForm extends Component {
 
 function validate(values) {
   const errors = {};
-  if (!values.title) {
-    errors.title = "You must provide a title";
-  }
+  errors.emails = validateEmails(values.emails || "");
+  FIELDS.forEach(({ name, errorMessage }) => {
+    if (!values[name]) {
+      errors[name] = errorMessage;
+    }
+  });
+
   return errors;
 }
 
