@@ -30,8 +30,9 @@ class Mailer extends helper.Mail {
 
   addRecipients() {
     const personalize = new helper.Personalization();
+    personalize.addTo("steve.giralt+emaily@gmail.com");
     this.recipients.forEach((recipient) => {
-      personalize.addTo(recipient);
+      personalize.addBcc(recipient);
     });
     this.addPersonalization(personalize);
   }
