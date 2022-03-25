@@ -17,6 +17,13 @@ module.exports = (app) => {
   });
   app
     .route("/api/surveys")
+    .get(requireLogin, async (req, res) => {
+      const surveys = await Survey.find(
+        { _user: req.user.id },
+        { recipients: false }
+      );
+      res.send(surveys);
+    })
     .post(requireLogin, requireCredits, async (req, res) => {
       const { title, subject, body, recipients } = req.body;
       const survey = new Survey({
@@ -62,6 +69,7 @@ module.exports = (app) => {
           {
             $inc: { [choice]: 1 },
             $set: { "recipients.$.responded": true },
+            lastResponded: new Date(),
           }
         ).exec();
       })
